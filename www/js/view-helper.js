@@ -6,15 +6,16 @@ require.config({
     baseUrl: "js/view-helper/",
     paths: {
         "jquery": "../jquery",
-        "mustache": "../libs/mustache"
+        "underscore": "../libs/underscore"
     }
 });
 
-requirejs(['jquery', 'helper', 'text!template.html', 'mustache'], 
-        function ($, helper, template) {
-    console.log(helper, template);
+requirejs(['jquery', 'helper', 'text!template.html', 'underscore'], 
+        function ($, helper, template, _) {
+
     var request = helper.getRequest(),
-        output = mustache.render(template, request);
+        output = _.template(template, request);
+
     $(function () {
         $("body").html(output);
     });
