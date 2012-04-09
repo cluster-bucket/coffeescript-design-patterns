@@ -11,7 +11,7 @@ require.config({
 });
 
 requirejs(['jquery', 'helper', 'text!template.html', 'mustache'], 
-        function (helper, template) {
+        function ($, helper, template) {
     console.log(helper, template);
     var request = helper.getRequest(),
         output = mustache.render(template, request);
