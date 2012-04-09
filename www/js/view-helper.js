@@ -10,7 +10,7 @@ require.config({
     }
 });
 
-requirejs(['jquery', 'helper', 'text!./view-helper/template.html', 'mustache'], 
+requirejs(['jquery', 'helper', 'text!template.html', 'mustache'], 
         function (helper, template) {
     console.log(helper, template);
     var request = helper.getRequest(),
