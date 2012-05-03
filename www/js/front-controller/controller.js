@@ -2,7 +2,7 @@
  * Central point of entry for every request
  */
 /*global define*/
-define(["jquery", "./request", "./resolver"], function ($, Request, Resolver) {
+define(["./request", "./resolver"], function (Request, Resolver) {
 
     var Controller  = function () {};
 
@@ -10,7 +10,7 @@ define(["jquery", "./request", "./resolver"], function ($, Request, Resolver) {
      * Convenience method
      * @static
      */
-    Controller.prototype.run = function (element) {
+    Controller.prototype.run = function () {
         var instance = new Controller();
         instance.init();
         instance.handleRequest();
