@@ -9,13 +9,14 @@ define(["jquery", "../views/main"], function ($, mainView) {
             var cmd,
                 path,
                 name,
-                defer;
+                defer,
+                params;
     
             defer = $.Deferred();
             
             // @todo determine command
             //cmd = request.getProperty("hash");
-            if (request.params && request.params.resource !== undefined) {
+            if (request.getProperty('params').resource !== undefined) {
                 cmd = "resource";
             } else {
                 return defer.resolve({

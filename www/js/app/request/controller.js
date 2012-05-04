@@ -1,6 +1,6 @@
 /*global define*/
 define(["../registry", "./request", "./resolver", "../helpers/configs"], 
-    function (registry, request, resolver, configs) {
+    function (registry, Request, resolver, configs) {
 
     return {
         run: function () {
@@ -17,13 +17,14 @@ define(["../registry", "./request", "./resolver", "../helpers/configs"],
             });
         },
         handle: function () {
-            var req = Object.create(request),
+            var req = new Request(),
                 cmdr = Object.create(resolver);
             
-            req.add("auth");
-            req.add("session");
-            req.add("params");
-            req = req.run();
+            req.addDecorator("auth");
+            req.addDecorator("session");
+            req.addDecorator("params");
+            req.applyDecorators();
+            console.log(req);
             
             cmdr.getCommand(req).then(function (result) {
                 result.command.execute(req);
