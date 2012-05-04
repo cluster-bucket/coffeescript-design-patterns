@@ -9,8 +9,7 @@ define(["jquery", "../views/main"], function ($, mainView) {
             var cmd,
                 path,
                 name,
-                defer,
-                params;
+                defer;
     
             defer = $.Deferred();
             
