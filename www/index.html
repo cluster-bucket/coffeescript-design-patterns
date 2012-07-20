@@ -1,9 +1,32 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <script data-main="js/app" src="js/require.js"></script>
-    </head>
-    <body>
-        <h1>Hello World</h1>
-    </body>
+  <head>
+    <title>Jasmine Spec Runner</title>
+
+  <!-- Jasmine -->
+  <link rel="stylesheet" href="lib/jasmine-1.2.0/jasmine.css">
+  <script src="lib/jasmine-1.2.0/jasmine.js"></script>
+  <script src="lib/jasmine-1.2.0/jasmine-html.js"></script>
+
+  <!-- Require -->
+  <script src="lib/require.js"></script>
+
+  <script>
+  require.config({
+    baseUrl: "./",
+    paths: {
+      cs: 'lib/cs',
+      CoffeeScript: 'lib/coffee-script'
+    }
+  });
+  require([
+    "cs!spec/js2ee.spec"
+  ], function() {
+    jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+    jasmine.getEnv().execute();
+  });
+  </script>
+</head>
+<body>
+</body>
 </html>
