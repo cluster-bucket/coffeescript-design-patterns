@@ -3,9 +3,12 @@ define [
   "cs!./decorator"
   "cs!./command"
   "cs!./list"
-], (decorator, command, List) ->
+  "cs!./iterator"
+  "cs!./observer"
+], (decorator, command, List, iterator, observer) ->
   
   decorator: decorator
   command: command
-  List: List
- 
+  iterator: iterator
+  observer: observer
+  List: List 

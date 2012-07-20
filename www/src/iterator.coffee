@@ -1,5 +1,6 @@
+# Iterator
 window.define = require("amdefine")(module) if typeof define isnt "function"
-define ["./list"], (List) ->
+define ["cs!./list"], (List) ->
 
   # Defines an interface for accessing and traversing elements.
   class Iterator
@@ -33,14 +34,18 @@ define ["./list"], (List) ->
   class ConcreteAggregate extends Aggregate
     createIterator: (items) ->
       list = new List()
-      count = 0
+      # count = 0
       
-      for item in items
-        item.__POINTER__ = count
-        list.add item
-        count += 1
+      for key, val of items
+        val.__POINTER__ = key # count
+        list.append val
+        # count += 1
         
       new ConcreteIterator list
+
+  iterator =
+    ConcreteIterator: ConcreteIterator
+    ConcreteAggregate: ConcreteAggregate
 
 
   ###

@@ -14,7 +14,7 @@ define [], () ->
   
     # Returns the object at the given length
     get: (index) ->
-      @objects[index]
+      @objects[@items[index]]
       
     # Returns the first object in the list
     first: () ->

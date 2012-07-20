@@ -5,15 +5,18 @@ define ["cs!./iterator", "cs!./list"], (Iterator, List) ->
   # * Provides an interface for attaching and detaching Observer objects.
   class Subject
     constructor: () ->
+      @counter = 0
       @observers = new List()
     attach: (o) ->
+      o.__POINTER__ = @counter
       @observers.append o
+      @counter += 1
     detach: (o) ->
       @observers.remove o
     notify: () ->
-      i = new Iterator @observers
-      while i.hasNext()
-        i.current().update @
+      i = new Iterator.ConcreteIterator @observers
+      while not i.isDone()
+        i.currentItem().update @
         i.next()
       
   # * Defines an updating interface for objects that should be 
@@ -24,10 +27,14 @@ define ["cs!./iterator", "cs!./list"], (Iterator, List) ->
 
   # Stores state of interest to ConcreteObserver objects
   class ConcreteSubject extends Subject
+
+    ###
     constructor: () ->
+      super()
       setInterval () =>
         @notify()
       , 1500
+    ###
   
   # * Maintains a reference to a ConcreteSubject object
   # * Stores state that should stay consistent with the subject's
@@ -37,6 +44,7 @@ define ["cs!./iterator", "cs!./list"], (Iterator, List) ->
     update: (theChangedSubject) ->
       console.log "Updated"
   
-  subject = new ConcreteSubject()
-  observer = new ConcreteObserver subject
+  observer =
+    ConcreteSubject: ConcreteSubject
+    ConcreteObserver: ConcreteObserver
   

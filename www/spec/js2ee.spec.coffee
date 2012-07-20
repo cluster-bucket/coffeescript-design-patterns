@@ -57,4 +57,46 @@ define [
       expect(list.count()).toBe(2)
       list.removeAll()
       expect(list.count()).toBe(0)
-      
+
+  describe "Iterator", () ->
+    items = {}
+    make = (num) ->
+      items[i] = {id: i} for i in [num..1]
+    make 4
+    console.log items
+    aggregate = new js2ee.iterator.ConcreteAggregate()
+    iterator = aggregate.createIterator items
+
+    it "should have all the concrete classes", () ->
+      expect(js2ee.iterator).toBeDefined()
+      expect(js2ee.iterator.ConcreteAggregate).toBeDefined()
+
+    it "should iterate through all the items", () ->     
+      out = []
+      while not iterator.isDone()
+        current = iterator.currentItem()
+        out.push current.id
+        iterator.next()
+
+      expect(out.length).toBe(4)
+
+  describe "Observer", () ->
+
+    it "should have all the concrete classes", () ->
+      expect(js2ee.observer).toBeDefined()
+      expect(js2ee.observer.ConcreteSubject).toBeDefined()
+      expect(js2ee.observer.ConcreteObserver).toBeDefined()
+
+    subject = new js2ee.observer.ConcreteSubject()
+    observer = new js2ee.observer.ConcreteObserver()
+
+    it "tracks that the observer was notified", () ->
+      called = false    
+      observer.update = (theChangedSubject) ->
+        called = true
+
+      subject.attach observer 
+      subject.notify()
+
+      expect(called).toBe(true)
+     
