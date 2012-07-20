@@ -27,9 +27,34 @@ define [
       
   describe "List", () ->
     list = new js2ee.List()
+
+    make = (num) ->
+      list.append({__POINTER__: i}) for i in [num..1]
+      
     it "should have all the correct methods", () ->
       expect(js2ee.List).toBeDefined()
+      expect(list).toBeDefined()
+      expect(list.count).toBeDefined()
+      expect(list.append).toBeDefined()
     
     it "should count new items", () ->
+      expect(list.count()).toBe(0)
+      make 1
+      expect(list.count()).toBe(1)
+      make 4
+      expect(list.count()).toBe(5)
+
+    it "should remove items", () ->
+      list.removeFirst()
+      expect(list.count()).toBe(4)
+      list.removeLast()
+      expect(list.count()).toBe(3)
+      
+    it "should get and remove a single item", () ->
+      item = list.get(list.count() - 1)
+      expect(item).toBeDefined()
+      list.remove(item)
+      expect(list.count()).toBe(2)
+      list.removeAll()
       expect(list.count()).toBe(0)
       
