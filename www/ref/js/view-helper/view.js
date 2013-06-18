@@ -1,2 +1,0 @@
-/*global define*/
-define();
