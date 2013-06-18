@@ -5,7 +5,7 @@ Ports of Gang of Four design patterns in CoffeeScript.
 
 * [Creational Patterns](#creational-patterns)
   * [Abstract Factory](#abstract-factory)
-  * [Builder](#builder)\*
+  * [Builder](#builder)
   * [Factory Method](#factory-method)
   * [Prototype](#prototype)\*
   * [Singleton](#singleton)
@@ -86,6 +86,44 @@ Abstract Factory
 
 Builder
 --------------------------------------------------------------------------------
+
+    do ->
+      class Director
+        constructor: (@builder) ->
+        construct: (structure) ->
+          for obj in structure
+            console.log obj
+            @builder.buildPart obj
+          return
+
+      class Product
+        constructor: () ->
+          @result = ''
+        append: (obj) ->
+          @result += obj
+        get: () ->
+          @result
+
+      class Builder
+        buildPart: () ->
+
+      class ConcreteBuilder extends Builder
+        constructor: () ->
+          @product = new Product()
+        buildPart: (obj) ->
+          @product.append obj.toUpperCase()
+        getResult: () ->
+          @product
+
+      class Client
+        @run: () ->
+          concreteBuilder = new ConcreteBuilder()
+          director = new Director concreteBuilder
+          director.construct "ohai"
+          result = concreteBuilder.getResult()
+          alert result.get()
+
+      Client.run()
 
 Factory Method
 --------------------------------------------------------------------------------
