@@ -1,4 +1,4 @@
-coffee Design Patterns
+CoffeeScript Design Patterns
 ================================================================================
 
 Ports of Gang of Four design patterns in coffee. 
