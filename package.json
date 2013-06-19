@@ -1,0 +1,29 @@
+{
+  "name": "CoffeeScript Design Patterns",
+  "description": "GoF design patterns with relevant examples written in CoffeeScript",
+  "version": "0.1",
+  "keywords": [
+    "CoffeeScript",
+    "Design Patterns",
+    "GoF"
+  ],
+  "maintainers": [
+    {
+      "name": "Dustin Boston",
+      "email": "dustin@dblogit.com",
+      "web": "http://dblogit.com"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "git",
+      "url": "git@github.com:dustinboston/coffeescript-design-patterns.git"
+    }
+  ],
+  "licenses": [
+    {
+      "name": "GPL",
+      "url": "http://www.gnu.org/licenses/gpl.html"
+    }
+  ]
+}
