@@ -1,36 +1,55 @@
 Markdown Converter
 ==================
 
+Requires the `markdown` package and `coffee-script` package.
+
+Run it like this: `coffee -c converter.coffee.md && node converter.js`
+
     fs = require('fs')
-    marked = require('marked')
+    md = require('markdown').markdown
 
     # Director
     class MarkdownReader
       constructor: (@builder) ->
-      construct: (structure) ->
-        links = structure.links
-        lastListOrdered = null
-
+      construct: (structure, refs) ->
         for token in structure
-          continue if token is 'links'
-          switch token.type
-            when 'heading' then @builder.convertHeading token.depth, token.text
-            when 'html' then @builder.convertHTML token.pre, token.text
-            when 'list_start' 
-              lastListOrdered = token.ordered
-              @builder.convertListStart token.ordered
-            when 'list_end'
-              @builder.convertListEnd lastListOrdered
-              lastListOrdered = null
-            when 'list_item_start' then @builder.convertListItemStart()
-            when 'text' then @builder.convertText token.text
-            when 'list_item_end' then @builder.convertListItemEnd()
-            when 'space' then @builder.convertSpace()
-            when 'paragraph' then @builder.convertParagraph token.text
-            when 'hr' then @builder.convertHorizontalRule()
-            when 'code' then @builder.convertCode token.text
-            when 'blockquote_start' then @builder.convertBlockquoteStart()
-            when 'blockquote_end' then @builder.convertBlockquoteEnd()
+          type = token.shift()
+          [args...] = token
+          switch type
+            when 'header' 
+              @builder.convertHeading args[0].level, args[1]
+            when 'para'
+              @builder.convertParagraphStart()
+              for arg in args
+                arg = ['text', arg] if typeof arg is 'string'
+                @construct([arg], refs) 
+              @builder.convertParagraphEnd()
+            when 'bulletlist'
+              @builder.convertBulletListStart()
+              @construct(args, refs)
+              @builder.convertBulletListEnd()
+            when 'listitem'
+              @builder.convertListItemStart()
+              for arg in args
+                arg = ['text', arg] if typeof arg is 'string'
+                @construct([arg], refs) 
+              @builder.convertListItemEnd()
+            when 'link'
+              @builder.convertLink args[0], args[1]
+            when 'strong'
+              @builder.convertStrong args[0]
+            when 'link_ref'
+              @builder.convertLink refs[args[0].ref] or {}, args[1]
+            when 'hr'
+              @builder.convertHorizontalRule()
+            when 'em'
+              @builder.convertEmphasis args[0]
+            when 'inlinecode'
+              @builder.convertInlineCode args[0]
+            when 'code_block'
+              @builder.convertCode args[0]
+            when 'text'
+              @builder.convertText args[0]
         return
 
     # Product
@@ -64,23 +83,17 @@ Markdown Converter
       convertHeading: (depth, text) ->
         @product.append "<h#{depth}>#{text}</h#{depth}>"
 
-      convertHTML: (pre, text) ->
-        if pre
-          @product.append "<pre>#{@escapeHtml text}</pre>"
-        else
-          @product.append text
+      convertBulletListStart: () ->
+        @product.append "<ul>"
 
-      convertListStart: (ordered) ->
-        if ordered
-          @product.append "<ol>"
-        else
-          @product.append "<ul>"
+      convertBulletListEnd: () ->
+        @product.append "</ul>"
 
-      convertListEnd: (ordered) ->
-        if ordered
-          @product.append "</ol>"
-        else
-          @product.append "</ul>"
+      convertOrderedListStart: () ->
+        @product.append "<ol>"
+
+      convertOrderedListEnd: () ->
+        @product.append "</ol>"
 
       convertListItemStart: () ->
         @product.append "<li>"
@@ -88,20 +101,33 @@ Markdown Converter
       convertListItemEnd: () ->
         @product.append "</li>"
 
+      convertLink: (attributes, text) ->
+        @product.append "<a href=\"#{attributes.href or ''}\" "
+        @product.append "title=\"#{attributes.title or ''}\">#{text}</a>"
+
       convertText: (text) ->
         @product.append text
 
-      convertSpace: () ->
-        @product.append "&nbsp;"
+      convertParagraphStart: () ->
+        @product.append "<p>"
 
-      convertParagraph: (text) ->
-        @product.append "<p>#{text}</p>"
+      convertParagraphEnd: () ->
+        @product.append "</p>"
+
+      convertStrong: (text) ->
+        @product.append "<strong>#{text}</strong>"
+
+      convertEmphasis: (text) ->
+        @product.append "<em>#{text}</em>"
 
       convertHorizontalRule: () ->
         @product.append "<hr />"
 
       convertCode: (text) ->
         @product.append "<pre><code>#{@escapeHtml text}</code></pre>"
+
+      convertInlineCode: (text) ->
+        @product.append "<code>#{@escapeHtml text}</code>"
 
       convertBlockquoteStart: () ->
         @product.append "<blockquote>"
@@ -115,16 +141,29 @@ Markdown Converter
     class Client
       @run: () ->
 
-        filename = './markdown.text'
-        fs.readFile filename, 'utf8', (err, data) ->
+        fs.readFile './markdown.text', 'utf8', (err, data) ->
           throw err if err
 
           concreteBuilder = new HTMLConverter()
           director = new MarkdownReader concreteBuilder
+    
+          tokens = md.parse data
+          lang = tokens.shift()
+          refs = tokens.shift()
 
-          tokens = marked.lexer data          
-          director.construct tokens
+          director.construct tokens, refs.references
           result = concreteBuilder.getResult()
-          console.log result.get()
+
+          fs.readFile './template.html', 'utf8', (err, data) ->
+            throw err if err
+            template = data.replace '{{markdown}}', result.get()
+
+            fs.writeFile "./markdown.html", template, (err) ->
+                throw err if err
+                console.log 'Wrote markdown.html!\n'
+
+            return
+          return
+        return
 
     Client.run()
