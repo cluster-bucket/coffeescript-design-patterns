@@ -14,7 +14,7 @@ Ports of Gang of Four design patterns in CoffeeScript.
   * [Bridge](#bridge)
   * [Composite](#composite)
   * [Decorator](#decorator)
-  * [Façade](#façade)\*
+  * [Façade](#façade)
   * [Flyweight](#flyweight)\*
   * [Proxy](#proxy)\*
 * [Behavioral Patterns](#behavioral-patterns)
@@ -356,6 +356,27 @@ Decorator
 
 Façade
 --------------------------------------------------------------------------------
+
+    do ->
+      class Subsystem1
+        constructor: () ->
+          console.log 'subsystem1'  
+
+      class Subsystem2
+        constructor: () ->
+          console.log 'subsystem2'
+
+      class Facade
+        request: () ->
+          s1 = new Subsystem1()
+          s2 = new Subsystem2()
+
+      class Client
+        @run: () ->
+          facade = new Facade()
+          facade.request()
+
+      Client.run()
 
 Flyweight
 --------------------------------------------------------------------------------
