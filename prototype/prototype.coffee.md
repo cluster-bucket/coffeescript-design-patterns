@@ -1,10 +1,7 @@
 
 
     class Prototype
-      clone: () ->
-        Clone = () ->
-        Clone:: = @
-        new Clone()
+      cloneObject: () -> Object.create @
       setProperty: (@property) ->
       getProperty: () -> @property
       logProperty: () -> console.log @property
@@ -17,7 +14,7 @@
       @run: () ->
         p = new ConcretePrototype1 1000
         for value in [1...10]
-          clone = p.clone()
+          clone = p.cloneObject()
           clone.setProperty clone.getProperty() * value
           clone.logProperty()
 

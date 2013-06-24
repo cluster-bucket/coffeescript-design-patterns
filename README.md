@@ -171,9 +171,14 @@ do ->
 
   class Prototype
     clone: () ->
-      Clone = () ->
-      Clone:: = @
-      new Clone()
+      if Object.create
+        Object.create @
+
+      else # if < IE9
+        Clone = () ->
+        Clone:: = @
+        new Clone()
+
     setProperty: (@property) ->
     logProperty: () -> console.log @property or '-'
 
@@ -186,25 +191,9 @@ do ->
       client = new Client()
       cp1 = new ConcretePrototype1()
       cp1Prototype = client.operation(cp1)
-      cp2 = new ConcretePrototype2()
-      cp2Prototype = client.operation(cp2)
 
-      cp1.logProperty()
       cp1.setProperty 'original1'
-      cp1.logProperty()
-      cp1Prototype.logProperty()
       cp1Prototype.setProperty 'clone1'
-      cp1Prototype.logProperty()
-      cp1.logProperty()
-
-      cp2.logProperty()
-      cp2.setProperty 'original2'
-      cp2.logProperty()
-      cp2Prototype.logProperty()
-      cp2Prototype.setProperty 'clone2'
-      cp2Prototype.logProperty()
-      cp2.logProperty()
-
       cp1.logProperty()
       cp1Prototype.logProperty()
 
