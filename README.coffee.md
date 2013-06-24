@@ -11,7 +11,7 @@ Ports of Gang of Four design patterns in CoffeeScript.
   * [Singleton](#singleton)
 * [Structural Patterns](#structural-patterns)
   * [Adapter](#adapter)
-  * [Bridge](#bridge)\*
+  * [Bridge](#bridge)
   * [Composite](#composite)
   * [Decorator](#decorator)
   * [Façade](#façade)\*
@@ -156,40 +156,41 @@ Factory Method
 Prototype
 --------------------------------------------------------------------------------
 
-    class Client
-      constructor: () ->
-      operation: (prototype) ->
-        p = prototype.clone()
+    do ->
+      class Client
+        constructor: () ->
+        operation: (prototype) ->
+          p = prototype.clone()
 
-    class Prototype
-      clone: () ->
-        if Object.create
-          Object.create @
+      class Prototype
+        clone: () ->
+          if Object.create
+            Object.create @
 
-        else # if < IE9
-          Clone = () ->
-          Clone:: = @
-          new Clone()
+          else # if < IE9
+            Clone = () ->
+            Clone:: = @
+            new Clone()
 
-      setProperty: (@property) ->
-      logProperty: () -> console.log @property or '-'
+        setProperty: (@property) ->
+        logProperty: () -> console.log @property or '-'
 
-    class ConcretePrototype1 extends Prototype
+      class ConcretePrototype1 extends Prototype
 
-    class ConcretePrototype2 extends Prototype
+      class ConcretePrototype2 extends Prototype
 
-    class Example
-      @run: () ->
-        client = new Client()
-        cp1 = new ConcretePrototype1()
-        cp1Prototype = client.operation(cp1)
+      class Example
+        @run: () ->
+          client = new Client()
+          cp1 = new ConcretePrototype1()
+          cp1Prototype = client.operation(cp1)
 
-        cp1.setProperty 'original1'
-        cp1Prototype.setProperty 'clone1'
-        cp1.logProperty()
-        cp1Prototype.logProperty()
+          cp1.setProperty 'original1'
+          cp1Prototype.setProperty 'clone1'
+          cp1.logProperty()
+          cp1Prototype.logProperty()
 
-    Example.run()
+      Example.run()
 
 Singleton
 --------------------------------------------------------------------------------
@@ -247,6 +248,37 @@ Adapter
 
 Bridge
 --------------------------------------------------------------------------------
+
+    do ->
+      class Abstraction
+        constructor: (@imp) ->
+        operation: () ->
+          @imp.operationImp()
+
+      class RefinedAbstraction extends Abstraction
+
+      class Implementor
+        operationImp: () ->
+
+      class ConcreteImplementorA extends Implementor
+        operationImp: () ->
+          console.log "ConcreteImplementorA::operationImp"
+
+      class ConcreteImplementorB extends Implementor
+        operationImp: () ->
+          console.log "ConcreteImplementorB::operationImp"
+
+      class Client
+        @run: () ->
+          concreteImplementorA = new ConcreteImplementorA()
+          refinedAbstractionA = new RefinedAbstraction concreteImplementorA
+          refinedAbstractionA.operation()
+
+          concreteImplementorB = new ConcreteImplementorB()
+          refinedAbstractionB = new RefinedAbstraction concreteImplementorB
+          refinedAbstractionB.operation()
+
+      Client.run()
 
 Composite
 --------------------------------------------------------------------------------

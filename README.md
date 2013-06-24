@@ -11,7 +11,7 @@ Ports of Gang of Four design patterns in coffee.
   * [Singleton](#singleton)
 * [Structural Patterns](#structural-patterns)
   * [Adapter](#adapter)
-  * [Bridge](#bridge)\*
+  * [Bridge](#bridge)
   * [Composite](#composite)
   * [Decorator](#decorator)
   * [Façade](#façade)\*
@@ -260,6 +260,39 @@ do ->
 
 Bridge
 --------------------------------------------------------------------------------
+
+```coffee
+do ->
+  class Abstraction
+    constructor: (@imp) ->
+    operation: () ->
+      @imp.operationImp()
+
+  class RefinedAbstraction extends Abstraction
+
+  class Implementor
+    operationImp: () ->
+
+  class ConcreteImplementorA extends Implementor
+    operationImp: () ->
+      console.log "ConcreteImplementorA::operationImp"
+
+  class ConcreteImplementorB extends Implementor
+    operationImp: () ->
+      console.log "ConcreteImplementorB::operationImp"
+
+  class Client
+    @run: () ->
+      concreteImplementorA = new ConcreteImplementorA()
+      refinedAbstractionA = new RefinedAbstraction concreteImplementorA
+      refinedAbstractionA.operation()
+
+      concreteImplementorB = new ConcreteImplementorB()
+      refinedAbstractionB = new RefinedAbstraction concreteImplementorB
+      refinedAbstractionB.operation()
+
+  Client.run()
+```
 
 Composite
 --------------------------------------------------------------------------------
