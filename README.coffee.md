@@ -381,6 +381,36 @@ Façade
 Flyweight
 --------------------------------------------------------------------------------
 
+    do ->
+
+      class FlyweightFactory
+        constructor: () ->
+          @flyweights = {}
+        getFlyweight: (key) ->
+          if @flyweights.hasOwnProperty key
+            @flyweights[key]
+          else
+            @flyweights[key] = new ConcreteFlyweight()
+
+      class Flyweight
+        operation: (extrinsicState) ->
+
+      class ConcreteFlyweight extends Flyweight
+        constructor: () ->
+          @intrinsicState = 0
+        operation: (extrinsicState) ->
+
+      class UnsharedConcreteFlyweight extends Flyweight
+        constructor: () ->
+          @allState = 0
+        operation: (extrinsicState) ->
+
+      class Client
+        @run: () ->
+
+      Client.run()
+
+
 Proxy
 --------------------------------------------------------------------------------
 
