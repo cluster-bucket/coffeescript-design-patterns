@@ -386,7 +386,7 @@ Flyweight
         constructor: () ->
           @flyweights = {}
         getFlyweight: (key) ->
-          if @flyweights.hasOwnProperty char
+          if @flyweights.hasOwnProperty key
             @flyweights[key]
           else
             @flyweights[key] = new ConcreteFlyweight key
@@ -398,20 +398,29 @@ Flyweight
       class ConcreteFlyweight extends Flyweight
         constructor: (@intrinsicState) ->
         operation: (extrinsicState) ->
+          console.log "Concrete Flyweight"
+          console.log "Extrinsic State: #{extrinsicState}"
+          console.log "Intrinsic State: #{@intrinsicState}"
     
       class UnsharedConcreteFlyweight extends Flyweight
         constructor: (@allState) ->
         operation: (extrinsicState) ->
+          console.log "Unshared Concrete Flyweight"
+          console.log "Extrinsic State: #{extrinsicState}"
     
       class Client
         @run: () ->
+          context = 42
           factory = new FlyweightFactory()
-          factory.getFlyweight 'foo'
-          factory.getFlyweight 'bar'
-          factory.getFlyweight 'baz'
+          foo = factory.getFlyweight 'foo'
+          bar = factory.getFlyweight 'bar'
+          baz = factory.getFlyweight 'baz'
+    
+          foo.operation context
+          bar.operation context
+          baz.operation context
     
       Client.run()
-
 
 Proxy
 --------------------------------------------------------------------------------
