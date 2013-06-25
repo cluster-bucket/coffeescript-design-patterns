@@ -386,28 +386,32 @@ Flyweight
       class FlyweightFactory
         constructor: () ->
           @flyweights = {}
-        getFlyweight: (key) ->
-          if @flyweights.hasOwnProperty key
+        getFlyweight: (args...) ->
+          [key] = args
+          if @flyweights.hasOwnProperty char
             @flyweights[key]
           else
-            @flyweights[key] = new ConcreteFlyweight()
-
+            @flyweights[key] = new ConcreteFlyweight.apply ConcreteFlyweight, args
+    
       class Flyweight
         operation: (extrinsicState) ->
-
+    
       class ConcreteFlyweight extends Flyweight
-        constructor: () ->
-          @intrinsicState = 0
+        constructor: (intrinsicState...) ->
+          [@key, @val] = intrinsicState
         operation: (extrinsicState) ->
-
+    
       class UnsharedConcreteFlyweight extends Flyweight
-        constructor: () ->
-          @allState = 0
+        constructor: (@allState) ->
         operation: (extrinsicState) ->
-
+    
       class Client
         @run: () ->
-
+          factory = new FlyweightFactory()
+          factory.getFlyweight 'alfa', '._'
+          factory.getFlyweight 'bravo', '_...'
+          factory.getFlyweight 'charlie', '_._.'
+    
       Client.run()
 
 
