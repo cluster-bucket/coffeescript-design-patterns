@@ -16,7 +16,7 @@ Ports of Gang of Four design patterns in coffee.
   * [Decorator](#decorator)
   * [Façade](#façade)
   * [Flyweight](#flyweight)
-  * [Proxy](#proxy)\*
+  * [Proxy](#proxy)
 * [Behavioral Patterns](#behavioral-patterns)
   * [Chain of Responsibility](#chain-of-responsibility)\*
   * [Command](#command)
@@ -430,6 +430,28 @@ Client.run()
 
 Proxy
 --------------------------------------------------------------------------------
+
+```coffee
+class Subject
+  request: ->
+
+class RealSubject extends Subject
+  request: ->
+    console.log "Real subject"
+
+class Proxy extends Subject
+  request: () ->
+    unless @realSubject?
+      @realSubject = new RealSubject()
+    @realSubject.request()
+
+class Client
+  @run: ->
+    proxy = new Proxy()
+    proxy.request()
+
+Client.run()
+```
 
 Behavioral Patterns
 ================================================================================
