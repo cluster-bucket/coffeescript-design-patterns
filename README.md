@@ -14,11 +14,11 @@ Ports of Gang of Four design patterns in coffee.
   * [Bridge](#bridge)
   * [Composite](#composite)
   * [Decorator](#decorator)
-  * [Façade](#façade)
+  * [Facade](#facade)
   * [Flyweight](#flyweight)
   * [Proxy](#proxy)
 * [Behavioral Patterns](#behavioral-patterns)
-  * [Chain of Responsibility](#chain-of-responsibility)\*
+  * [Chain of Responsibility](#chain-of-responsibility)
   * [Command](#command)
   * [Interpreter](#interpreter)
   * [Iterator](#iterator)
@@ -362,13 +362,13 @@ class Example
 Example.run()
 ```
 
-Façade
+Facade
 --------------------------------------------------------------------------------
 
 ```coffee
 class Subsystem1
   constructor: () ->
-    console.log 'subsystem1'  
+    console.log 'subsystem1'
 
 class Subsystem2
   constructor: () ->
@@ -458,6 +458,28 @@ Behavioral Patterns
 
 Chain of Responsibility
 --------------------------------------------------------------------------------
+
+```coffee
+class Handler
+  constructor: (@kind, @successor) ->
+  handleRequest: ->
+    if @successor
+      @successor.handleRequest()
+
+class ConcreteHandler1 extends Handler
+  handleRequest: ->
+    console.log "#{@kind} handled"
+
+class ConcreteHandler2 extends Handler
+
+class Client
+  @run: ->
+    concreteHandler1 = new ConcreteHandler1 "foo"
+    concreteHandler2 = new ConcreteHandler2 "bar", concreteHandler1
+    concreteHandler2.handleRequest()
+
+Client.run()
+```
 
 Command
 --------------------------------------------------------------------------------
@@ -629,6 +651,52 @@ Example.run()
 
 Memento
 --------------------------------------------------------------------------------
+
+```coffee
+class Memento
+  constructor: (@state) ->
+  getState: -> @state
+
+class Originator
+  constructor: (@state) ->
+
+  setMemento: (memento) ->
+    @state = memento.getState()
+    return
+
+  createMemento: ->
+    new Memento @state
+
+  _changeState: (@state) ->
+  _showState: ->
+    console.log @state
+
+class Caretaker
+  constructor: (@originator) ->
+
+  doCommand: ->
+    @state = @originator.createMemento()
+    @originator.setMemento @state
+
+  undoCommand: ->
+    @originator.setMemento @state
+
+class Client
+  @run: ->
+    originator = new Originator "foo"
+    caretaker = new Caretaker originator
+    originator._showState()
+
+    caretaker.doCommand()
+
+    originator._changeState "bar"
+    originator._showState()
+
+    caretaker.undoCommand()
+    originator._showState()
+
+Client.run()
+```
 
 Observer
 --------------------------------------------------------------------------------
