@@ -55,20 +55,20 @@ class ConcreteProductB1 extends AbstractProductB
 class ConcreteProductB2 extends AbstractProductB
 
 class AbstractFactory
-  createProductA: () ->
-  createProductB: () ->
+  createProductA: ->
+  createProductB: ->
 
 class ConcreteFactory1 extends AbstractFactory
-  createProductA: () ->
-    new ConcreteProductA1 "ConcreteProductA1"
-  createProductB: () ->
-    new ConcreteProductB1 "ConcreteProductB1"
+  createProductA: ->
+    new ConcreteProductA1 'ConcreteProductA1'
+  createProductB: ->
+    new ConcreteProductB1 'ConcreteProductB1'
 
 class ConcreteFactory2 extends AbstractFactory
-  createProductA: () ->
-    new ConcreteProductA2 "ConcreteProductA2"
-  createProductB: () ->
-    new ConcreteProductB2 "ConcreteProductB2"
+  createProductA: ->
+    new ConcreteProductA2 'ConcreteProductA2'
+  createProductB: ->
+    new ConcreteProductB2 'ConcreteProductB2'
 
 class Client
   constructor: (factory) ->
@@ -76,10 +76,10 @@ class Client
     @abstractProductB = factory.createProductB()
 
 class Example
-  @run: () ->
-    factory1 = new ConcreteFactory1()
+  @run: ->
+    factory1 = new ConcreteFactory1
     client1 = new Client factory1
-    factory2 = new ConcreteFactory2()
+    factory2 = new ConcreteFactory2
     client2 = new Client factory2
 
 Example.run()
@@ -98,29 +98,29 @@ class Director
     return
 
 class Product
-  constructor: () ->
+  constructor: ->
     @result = ''
   append: (obj) ->
     @result += obj
-  get: () ->
+  get: ->
     @result
 
 class Builder
-  buildPart: () ->
+  buildPart: ->
 
 class ConcreteBuilder extends Builder
-  constructor: () ->
-    @product = new Product()
+  constructor: ->
+    @product = new Product
   buildPart: (obj) ->
     @product.append obj.toUpperCase()
-  getResult: () ->
+  getResult: ->
     @product
 
 class Client
-  @run: () ->
-    concreteBuilder = new ConcreteBuilder()
+  @run: ->
+    concreteBuilder = new ConcreteBuilder
     director = new Director concreteBuilder
-    director.construct "ohai"
+    director.construct 'ohai'
     result = concreteBuilder.getResult()
     alert result.get()
 
@@ -136,19 +136,19 @@ class ConcreteProduct1 extends Product
 class ConcreteProduct2 extends Product
 
 class Creator
-  factoryMethod: () ->
-  operation: () ->
+  factoryMethod: ->
+  operation: ->
     product = @factoryMethod()
 
 class ConcreteCreator extends Creator
   factoryMethod: (id) ->
     switch id
-      when id is 1 then return new ConcreteProduct1()      
-      when id is 2 then return new ConcreteProduct2()
+      when id is 1 then return new ConcreteProduct1      
+      when id is 2 then return new ConcreteProduct2
 
 class Example
-  @run: () ->
-    creator = new ConcreteCreator()
+  @run: ->
+    creator = new ConcreteCreator
     console.log creator.factoryMethod 1
     console.log creator.factoryMethod 2
     console.log creator.factoryMethod 3
@@ -161,32 +161,32 @@ Prototype
 
 ```coffee
 class Client
-  constructor: () ->
+  constructor: ->
   operation: (prototype) ->
     p = prototype.clone()
 
 class Prototype
-  clone: () ->
+  clone: ->
     if Object.create
       Object.create @
 
     else # if < IE9
-      Clone = () ->
+      Clone = ->
       Clone:: = @
-      new Clone()
+      new Clone
 
   setProperty: (@property) ->
-  logProperty: () -> console.log @property or '-'
+  logProperty: -> console.log @property or '-'
 
 class ConcretePrototype1 extends Prototype
 
 class ConcretePrototype2 extends Prototype
 
 class Example
-  @run: () ->
-    client = new Client()
-    cp1 = new ConcretePrototype1()
-    cp1Prototype = client.operation(cp1)
+  @run: ->
+    client = new Client
+    cp1 = new ConcretePrototype1
+    cp1Prototype = client.operation cp1
 
     cp1.setProperty 'original1'
     cp1Prototype.setProperty 'clone1'
@@ -206,9 +206,9 @@ class Singleton
     @_instance ||= new @ arguments...
 
 class Example
-  @run: () ->
+  @run: ->
     class ExampleClass extends Singleton
-      constructor: () ->
+      constructor: ->
       properties: {}
       set: (key, val) ->
         @properties[key] = val
@@ -231,21 +231,21 @@ Adapter
 
 ```coffee
 class Target
-  request: () ->
-    console.log "Not fired"
+  request: ->
+    console.log 'Not fired'
 
 class Adaptee
-  specificRequest: () ->
-    console.log "Specific request"
+  specificRequest: ->
+    console.log 'Specific request'
 
 class Adapter extends Target
   constructor: (@adaptee) ->
-  request: () ->
+  request: ->
     @adaptee.specificRequest()
 
 class Client
-  @run: () ->
-    adaptee = new Adaptee()
+  @run: ->
+    adaptee = new Adaptee
     adapter = new Adapter adaptee
     adapter.request()
 
@@ -258,29 +258,29 @@ Bridge
 ```coffee
 class Abstraction
   constructor: (@imp) ->
-  operation: () ->
+  operation: ->
     @imp.operationImp()
 
 class RefinedAbstraction extends Abstraction
 
 class Implementor
-  operationImp: () ->
+  operationImp: ->
 
 class ConcreteImplementorA extends Implementor
-  operationImp: () ->
-    console.log "ConcreteImplementorA::operationImp"
+  operationImp: ->
+    console.log 'ConcreteImplementorA::operationImp'
 
 class ConcreteImplementorB extends Implementor
-  operationImp: () ->
-    console.log "ConcreteImplementorB::operationImp"
+  operationImp: ->
+    console.log 'ConcreteImplementorB::operationImp'
 
 class Client
-  @run: () ->
-    concreteImplementorA = new ConcreteImplementorA()
+  @run: ->
+    concreteImplementorA = new ConcreteImplementorA
     refinedAbstractionA = new RefinedAbstraction concreteImplementorA
     refinedAbstractionA.operation()
 
-    concreteImplementorB = new ConcreteImplementorB()
+    concreteImplementorB = new ConcreteImplementorB
     refinedAbstractionB = new RefinedAbstraction concreteImplementorB
     refinedAbstractionB.operation()
 
@@ -292,10 +292,10 @@ Composite
 
 ```coffee
 class Component
-  constructor: () ->
+  constructor: ->
     @list = []
-  getComposite: () ->
-  operation: () ->
+  getComposite: ->
+  operation: ->
   add: (component) ->
 
 class Leaf extends Component
@@ -303,21 +303,21 @@ class Leaf extends Component
 class Composite extends Component
   add: (component) ->
     @list.push component
-  operation: () ->
+  operation: ->
     console.log @list
-  getComposite: () ->
+  getComposite: ->
     @
 
 class Client
-  @run: () ->
+  @run: ->
     # Create a Composite object and add a Leaf
-    composite = new Composite()
+    composite = new Composite
     leaf = new Leaf()
     composite.add leaf
     composite.operation()
     
     # Add a Composite to the Composite
-    composite2 = new Composite()
+    composite2 = new Composite
     composite.add composite2
     composite.operation()
 
@@ -332,31 +332,31 @@ class Component
   props: {}
   add: (key, val) ->
     @props[key] = val
-  get: () ->
+  get: ->
     @props
-  process: () ->
+  process: ->
 
 class ConcreteComponent extends Component
-  process: () ->
+  process: ->
 
 class Decorator extends Component
   constructor: (@component) ->
-  process: () ->
+  process: ->
     @component.process()
 
 class ConcreteDecoratorA extends Decorator
-  process: () ->
-    @component.add "concreteDecoratorAProcess", true
+  process: ->
+    @component.add 'concreteDecoratorAProcess', true
     super()
 
 class ConcreteDecoratorB extends Decorator
-  process: () ->
-    @component.add "concreteDecoratorBProcess", true
+  process: ->
+    @component.add 'concreteDecoratorBProcess', true
     super()
 
 class Example
-  @run: () ->
-    cmpt = new ConcreteDecoratorA new ConcreteDecoratorB new ConcreteComponent()
+  @run: ->
+    cmpt = new ConcreteDecoratorA new ConcreteDecoratorB new ConcreteComponent
     cmpt.process()
 
 Example.run()
@@ -367,21 +367,21 @@ Facade
 
 ```coffee
 class Subsystem1
-  constructor: () ->
+  constructor: ->
     console.log 'subsystem1'
 
 class Subsystem2
-  constructor: () ->
+  constructor: ->
     console.log 'subsystem2'
 
 class Facade
-  request: () ->
-    s1 = new Subsystem1()
-    s2 = new Subsystem2()
+  request: ->
+    s1 = new Subsystem1
+    s2 = new Subsystem2
 
 class Client
-  @run: () ->
-    facade = new Facade()
+  @run: ->
+    facade = new Facade
     facade.request()
 
 Client.run()
@@ -405,7 +405,7 @@ class Flyweight
   operation: (extrinsicState) ->
 
 class ConcreteFlyweight extends Flyweight
-  intrinsicState: ""
+  intrinsicState: ''
   operation: (extrinsicState) ->
     @intrinsicState += "#{extrinsicState} "
     console.log @intrinsicState
@@ -415,15 +415,15 @@ class UnsharedConcreteFlyweight extends Flyweight
 
 class Client
   @run: ->
-    factory = new FlyweightFactory()
-    foo = factory.getFlyweight "foo"
-    bar = factory.getFlyweight "bar"
-    baz = factory.getFlyweight "baz"
-    qux = factory.getFlyweight "foo"
-    foo.operation "red"
-    bar.operation "green"
-    baz.operation "blue"
-    qux.operation "black"
+    factory = new FlyweightFactory
+    foo = factory.getFlyweight 'foo'
+    bar = factory.getFlyweight 'bar'
+    baz = factory.getFlyweight 'baz'
+    qux = factory.getFlyweight 'foo'
+    foo.operation 'red'
+    bar.operation 'green'
+    baz.operation 'blue'
+    qux.operation 'black'
  
 Client.run()
 ```
@@ -437,17 +437,17 @@ class Subject
 
 class RealSubject extends Subject
   request: ->
-    console.log "Real subject"
+    console.log 'Real subject'
 
 class Proxy extends Subject
-  request: () ->
+  request: ->
     unless @realSubject?
-      @realSubject = new RealSubject()
+      @realSubject = new RealSubject
     @realSubject.request()
 
 class Client
   @run: ->
-    proxy = new Proxy()
+    proxy = new Proxy
     proxy.request()
 
 Client.run()
@@ -474,8 +474,8 @@ class ConcreteHandler2 extends Handler
 
 class Client
   @run: ->
-    concreteHandler1 = new ConcreteHandler1 "foo"
-    concreteHandler2 = new ConcreteHandler2 "bar", concreteHandler1
+    concreteHandler1 = new ConcreteHandler1 'foo'
+    concreteHandler2 = new ConcreteHandler2 'bar', concreteHandler1
     concreteHandler2.handleRequest()
 
 Client.run()
@@ -486,24 +486,24 @@ Command
 
 ```coffee
 class Command
-  execute: () ->
+  execute: ->
 
 class Invoker
   execute: (command) ->
     command.execute()
 
 class Receiver
-  action1: () -> console.log "action1"
-  action2: () -> console.log "action2"
+  action1: -> console.log 'action1'
+  action2: -> console.log 'action2'
 
 class ConcreteCommandA extends Command
   constructor: (@receiver) ->
-  execute: () ->
+  execute: ->
     @receiver.action1()
 
 class ConcreteCommandB extends Command
   constructor: (@receiver) ->
-  execute: () ->
+  execute: ->
     @receiver.action2()
 
 class Client
@@ -511,12 +511,12 @@ class Client
     receiver = new Receiver()
     ccmdA = new ConcreteCommandA receiver
     ccmdB = new ConcreteCommandB receiver
-    invoker = new Invoker()
+    invoker = new Invoker
     invoker.execute ccmdA if action is 1
     invoker.execute ccmdB if action is 2
 
 class Example
-  @run: () ->
+  @run: ->
     Client.run 1
     Client.run 2
 
@@ -529,11 +529,11 @@ Interpreter
 ```coffee
 class Context
   constructor: (@name) ->
-  getName: () ->
+  getName: ->
     @name
 
 class AbstractExpression
-  constructor: () ->
+  constructor: ->
     @expressions = []
   interpret: (@context) ->
 
@@ -551,11 +551,11 @@ class NonterminalExpression extends AbstractExpression
       expression.interpret @context
 
 class Client
-  @run: () ->
+  @run: ->
     context = new Context '*le context'
-    root = new NonterminalExpression()
-    root.addExpression new TerminalExpression()
-    root.addExpression new TerminalExpression()
+    root = new NonterminalExpression
+    root.addExpression new TerminalExpression
+    root.addExpression new TerminalExpression
     root.interpret context
 
 Client.run()
@@ -566,38 +566,38 @@ Iterator
 
 ```coffee
 class Iterator
-  first: () ->
-  next: () ->
-  isDone: () ->
-  currentItem: () ->
+  first: ->
+  next: ->
+  isDone: ->
+  currentItem: ->
 
 class ConcreteIterator extends Iterator
   constructor: (@list) ->
     @current = 0
-  first: () ->
+  first: ->
     @current = 0
-  next: () ->
+  next: ->
     @current += 1
-  isDone: () ->
+  isDone: ->
     @current >= @list.count()
-  currentItem: () ->
-    throw new Error "IteratorOutOfBounds" if @isDone()
+  currentItem: ->
+    throw new Error 'IteratorOutOfBounds' if @isDone()
     @list.get @current
     
 class Aggregate
-  createIterator: () ->
+  createIterator: ->
 
 class ConcreteAggregate extends Aggregate
   createIterator: (items) ->
-    list = new List()
+    list = new List
     for key, val of items
       val.__POINTER__ = key
       list.append val
     new ConcreteIterator list
 
 class Client
-  @run: () ->
-    aggregate = new ConcreteAggregate()
+  @run: ->
+    aggregate = new ConcreteAggregate
     iterator = aggregate.createIterator items
 
     while not iterator.isDone()
@@ -614,22 +614,22 @@ Mediator
 ```coffee
 class Colleague
   constructor: (@mediator) ->
-  changed: () ->
+  changed: ->
     @mediator.colleagueChanged @
 
 class ConcreteColleague1 extends Colleague
-  event: () ->
+  event: ->
     @changed()
 
 class ConcreteColleague2 extends Colleague
-  event: () ->
+  event: ->
     @changed()
 
 class Mediator
   colleagueChanged: (colleague) ->
 
 class ConcreteMediator extends Mediator
-  createColleagues: () ->
+  createColleagues: ->
     @colleague1 = new ConcreteColleague1 @
     @colleague2 = new ConcreteColleague2 @
     @colleague1.event()
@@ -637,13 +637,13 @@ class ConcreteMediator extends Mediator
 
   colleagueChanged: (colleague) ->
     if colleague instanceof ConcreteColleague1
-      console.log "colleague1 changed"
+      console.log 'colleague1 changed'
     else if colleague instanceof ConcreteColleague2
-      console.log "colleague2 changed"
+      console.log 'colleague2 changed'
 
 class Example
-  @run: () ->
-    m = new ConcreteMediator()
+  @run: ->
+    m = new ConcreteMediator
     m.createColleagues()
 
 Example.run()
@@ -683,13 +683,13 @@ class Caretaker
 
 class Client
   @run: ->
-    originator = new Originator "foo"
+    originator = new Originator 'foo'
     caretaker = new Caretaker originator
     originator._showState()
 
     caretaker.doCommand()
 
-    originator._changeState "bar"
+    originator._changeState 'bar'
     originator._showState()
 
     caretaker.undoCommand()
@@ -703,7 +703,7 @@ Observer
 
 ```coffee
 class Subject
-  constructor: () ->
+  constructor: ->
     @counter = 0
     @observers = new List()
   attach: (o) ->
@@ -712,7 +712,7 @@ class Subject
     @counter += 1
   detach: (o) ->
     @observers.remove o
-  notify: () ->
+  notify: ->
     i = new ConcreteIterator @observers
     while not i.isDone()
       i.currentItem().update @
@@ -728,9 +728,9 @@ class ConcreteObserver extends Observer
     console.log "Updated"
 
 class Example
-  @run: () ->
-    subject = new ConcreteSubject()
-    observer = new ConcreteObserver()
+  @run: ->
+    subject = new ConcreteSubject
+    observer = new ConcreteObserver
     subject.attach observer 
     subject.notify()
 
@@ -746,34 +746,34 @@ Strategy
 ```coffee
 class Context
   constructor: (@strategy) ->
-  contextInterface: () ->
+  contextInterface: ->
     @strategy.algorithmInterface()
 
 class Strategy
-  algorithmInterface: () ->
+  algorithmInterface: ->
 
 class ConcreteStrategyA extends Strategy
-  algorithmInterface: () ->
-    console.log "ConcreteStrategyA"
+  algorithmInterface: ->
+    console.log 'ConcreteStrategyA'
 
 class ConcreteStrategyB extends Strategy
-  algorithmInterface: () ->
-    console.log "ConcreteStrategyB"
+  algorithmInterface: ->
+    console.log 'ConcreteStrategyB'
 
 class ConcreteStrategyC extends Strategy
-  algorithmInterface: () ->
-    console.log "ConcreteStrategyC"
+  algorithmInterface: ->
+    console.log 'ConcreteStrategyC'
 
 class Example
-  @run: () ->
+  @run: ->
     context = new Context new ConcreteStrategyA
-    resultA = context.contextInterface()
+    resultA = context.contextInterface
 
     context = new Context new ConcreteStrategyB
-    resultB = context.contextInterface()
+    resultB = context.contextInterface
 
     context = new Context new ConcreteStrategyC
-    resultC = context.contextInterface()
+    resultC = context.contextInterface
 
 Example.run()
 ```
@@ -783,37 +783,37 @@ Template Method
 
 ```coffee
 class AbstractClass
-  templateMethod: () ->
+  templateMethod: ->
     @primitiveOperation1()
     @primitiveOperation2()
 
-  primitiveOperation1: () ->
-  primitiveOperation2: () ->
+  primitiveOperation1: ->
+  primitiveOperation2: ->
 
 class ConcreteClass extends AbstractClass
-  primitiveOperation1: () ->
-    console.log "primitiveOperation1"
-  primitiveOperation2: () ->
-    console.log "primitiveOperation2"
+  primitiveOperation1: ->
+    console.log 'primitiveOperation1'
+  primitiveOperation2: ->
+    console.log 'primitiveOperation2'
 
 # Static Template Method
 class StaticAbstractClass
-  @templateMethod: () ->
+  @templateMethod: ->
     cls = new @()
     cls.primitiveOperation1()
     cls.primitiveOperation2()
-  primitiveOperation1: () ->
-  primitiveOperation2: () ->
+  primitiveOperation1: ->
+  primitiveOperation2: ->
 
 class StaticConcreteClass extends StaticAbstractClass
-  primitiveOperation1: () ->
-    console.log "primitiveOperation1"
-  primitiveOperation2: () ->
-    console.log "primitiveOperation2"
+  primitiveOperation1: ->
+    console.log 'primitiveOperation1'
+  primitiveOperation2: ->
+    console.log 'primitiveOperation2'
 
 class Example
-  @run: () ->
-    concrete = new ConcreteClass()
+  @run: ->
+    concrete = new ConcreteClass
     concrete.templateMethod()
 
     StaticConcreteClass.templateMethod()
@@ -832,7 +832,7 @@ List Class
 
 ```coffee
 class List
-  constructor: () ->
+  constructor: ->
     # A list of pointers
     @items = []
     
@@ -840,7 +840,7 @@ class List
     @objects = {}
 
   # Returns the number of objects in the list
-  count: () ->
+  count: ->
     @items.length
 
   # Returns the object at the given length
@@ -848,11 +848,11 @@ class List
     @objects[@items[index]]
     
   # Returns the first object in the list
-  first: () ->
+  first: ->
     @objects[@items[0]]
 
   # Returns the last object in the list
-  last: () ->
+  last: ->
     @objects[@items[@items.length - 1]]
 
   # Adds the argument to the list, making it the last item
@@ -870,18 +870,18 @@ class List
     @items.splice index, 1
 
   # Removes the last element from the list
-  removeLast: () ->
+  removeLast: ->
     @remove @last
 
   # Removes the first element from the list
-  removeFirst: () ->
+  removeFirst: ->
     @remove @first
 
   # Removes all elements from the list
-  removeAll: () ->
+  removeAll: ->
     @items = []
     @objects = {}
 
-list = new List()
+list = new List
 list.append __POINTER__: "uniqueid", other: "properties"
 ```
