@@ -77,9 +77,9 @@ class Client
 
 class Example
   @run: ->
-    factory1 = new ConcreteFactory1
+    factory1 = new ConcreteFactory1()
     client1 = new Client factory1
-    factory2 = new ConcreteFactory2
+    factory2 = new ConcreteFactory2()
     client2 = new Client factory2
 
 Example.run()
@@ -110,7 +110,7 @@ class Builder
 
 class ConcreteBuilder extends Builder
   constructor: ->
-    @product = new Product
+    @product = new Product()
   buildPart: (obj) ->
     @product.append obj.toUpperCase()
   getResult: ->
@@ -118,7 +118,7 @@ class ConcreteBuilder extends Builder
 
 class Client
   @run: ->
-    concreteBuilder = new ConcreteBuilder
+    concreteBuilder = new ConcreteBuilder()
     director = new Director concreteBuilder
     director.construct 'ohai'
     result = concreteBuilder.getResult()
@@ -143,12 +143,12 @@ class Creator
 class ConcreteCreator extends Creator
   factoryMethod: (id) ->
     switch id
-      when id is 1 then return new ConcreteProduct1      
-      when id is 2 then return new ConcreteProduct2
+      when id is 1 then return new ConcreteProduct1()
+      when id is 2 then return new ConcreteProduct2()
 
 class Example
   @run: ->
-    creator = new ConcreteCreator
+    creator = new ConcreteCreator()
     console.log creator.factoryMethod 1
     console.log creator.factoryMethod 2
     console.log creator.factoryMethod 3
@@ -173,7 +173,7 @@ class Prototype
     else # if < IE9
       Clone = ->
       Clone:: = @
-      new Clone
+      new Clone()
 
   setProperty: (@property) ->
   logProperty: -> console.log @property or '-'
@@ -184,8 +184,8 @@ class ConcretePrototype2 extends Prototype
 
 class Example
   @run: ->
-    client = new Client
-    cp1 = new ConcretePrototype1
+    client = new Client()
+    cp1 = new ConcretePrototype1()
     cp1Prototype = client.operation cp1
 
     cp1.setProperty 'original1'
@@ -217,8 +217,8 @@ class Example
         @properties[key]
 
     example = ExampleClass.getInstance()
-    example.set "Singleton", "This is a singleton value"
-    console.log example.get "Singleton"
+    example.set 'Singleton', 'This is a singleton value'
+    console.log example.get 'Singleton'
 
 Example.run()
 ```
@@ -245,7 +245,7 @@ class Adapter extends Target
 
 class Client
   @run: ->
-    adaptee = new Adaptee
+    adaptee = new Adaptee()
     adapter = new Adapter adaptee
     adapter.request()
 
@@ -276,11 +276,11 @@ class ConcreteImplementorB extends Implementor
 
 class Client
   @run: ->
-    concreteImplementorA = new ConcreteImplementorA
+    concreteImplementorA = new ConcreteImplementorA()
     refinedAbstractionA = new RefinedAbstraction concreteImplementorA
     refinedAbstractionA.operation()
 
-    concreteImplementorB = new ConcreteImplementorB
+    concreteImplementorB = new ConcreteImplementorB()
     refinedAbstractionB = new RefinedAbstraction concreteImplementorB
     refinedAbstractionB.operation()
 
@@ -311,13 +311,13 @@ class Composite extends Component
 class Client
   @run: ->
     # Create a Composite object and add a Leaf
-    composite = new Composite
+    composite = new Composite()
     leaf = new Leaf()
     composite.add leaf
     composite.operation()
     
     # Add a Composite to the Composite
-    composite2 = new Composite
+    composite2 = new Composite()
     composite.add composite2
     composite.operation()
 
@@ -356,7 +356,7 @@ class ConcreteDecoratorB extends Decorator
 
 class Example
   @run: ->
-    cmpt = new ConcreteDecoratorA new ConcreteDecoratorB new ConcreteComponent
+    cmpt = new ConcreteDecoratorA new ConcreteDecoratorB new ConcreteComponent()
     cmpt.process()
 
 Example.run()
@@ -376,12 +376,12 @@ class Subsystem2
 
 class Facade
   request: ->
-    s1 = new Subsystem1
-    s2 = new Subsystem2
+    s1 = new Subsystem1()
+    s2 = new Subsystem2()
 
 class Client
   @run: ->
-    facade = new Facade
+    facade = new Facade()
     facade.request()
 
 Client.run()
@@ -415,7 +415,7 @@ class UnsharedConcreteFlyweight extends Flyweight
 
 class Client
   @run: ->
-    factory = new FlyweightFactory
+    factory = new FlyweightFactory()
     foo = factory.getFlyweight 'foo'
     bar = factory.getFlyweight 'bar'
     baz = factory.getFlyweight 'baz'
@@ -442,12 +442,12 @@ class RealSubject extends Subject
 class Proxy extends Subject
   request: ->
     unless @realSubject?
-      @realSubject = new RealSubject
+      @realSubject = new RealSubject()
     @realSubject.request()
 
 class Client
   @run: ->
-    proxy = new Proxy
+    proxy = new Proxy()
     proxy.request()
 
 Client.run()
@@ -511,7 +511,7 @@ class Client
     receiver = new Receiver()
     ccmdA = new ConcreteCommandA receiver
     ccmdB = new ConcreteCommandB receiver
-    invoker = new Invoker
+    invoker = new Invoker()
     invoker.execute ccmdA if action is 1
     invoker.execute ccmdB if action is 2
 
@@ -553,9 +553,9 @@ class NonterminalExpression extends AbstractExpression
 class Client
   @run: ->
     context = new Context '*le context'
-    root = new NonterminalExpression
-    root.addExpression new TerminalExpression
-    root.addExpression new TerminalExpression
+    root = new NonterminalExpression()
+    root.addExpression new TerminalExpression()
+    root.addExpression new TerminalExpression()
     root.interpret context
 
 Client.run()
@@ -589,7 +589,7 @@ class Aggregate
 
 class ConcreteAggregate extends Aggregate
   createIterator: (items) ->
-    list = new List
+    list = new List()
     for key, val of items
       val.__POINTER__ = key
       list.append val
@@ -597,7 +597,7 @@ class ConcreteAggregate extends Aggregate
 
 class Client
   @run: ->
-    aggregate = new ConcreteAggregate
+    aggregate = new ConcreteAggregate()
     iterator = aggregate.createIterator items
 
     while not iterator.isDone()
@@ -643,7 +643,7 @@ class ConcreteMediator extends Mediator
 
 class Example
   @run: ->
-    m = new ConcreteMediator
+    m = new ConcreteMediator()
     m.createColleagues()
 
 Example.run()
@@ -725,12 +725,12 @@ class ConcreteSubject extends Subject
 
 class ConcreteObserver extends Observer
   update: (theChangedSubject) ->
-    console.log "Updated"
+    console.log 'Updated'
 
 class Example
   @run: ->
-    subject = new ConcreteSubject
-    observer = new ConcreteObserver
+    subject = new ConcreteSubject()
+    observer = new ConcreteObserver()
     subject.attach observer 
     subject.notify()
 
@@ -766,13 +766,13 @@ class ConcreteStrategyC extends Strategy
 
 class Example
   @run: ->
-    context = new Context new ConcreteStrategyA
+    context = new Context new ConcreteStrategyA()
     resultA = context.contextInterface
 
-    context = new Context new ConcreteStrategyB
+    context = new Context new ConcreteStrategyB()
     resultB = context.contextInterface
 
-    context = new Context new ConcreteStrategyC
+    context = new Context new ConcreteStrategyC()
     resultC = context.contextInterface
 
 Example.run()
@@ -813,7 +813,7 @@ class StaticConcreteClass extends StaticAbstractClass
 
 class Example
   @run: ->
-    concrete = new ConcreteClass
+    concrete = new ConcreteClass()
     concrete.templateMethod()
 
     StaticConcreteClass.templateMethod()
@@ -882,6 +882,6 @@ class List
     @items = []
     @objects = {}
 
-list = new List
-list.append __POINTER__: "uniqueid", other: "properties"
+list = new List()
+list.append __POINTER__: 'uniqueid', other: 'properties'
 ```
